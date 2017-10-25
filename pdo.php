@@ -11,11 +11,14 @@ try {
     $conn = new PDO("mysql:host=$server;dbname=$dbase", $uname, $password);
     // set the PDO error mode to exception
     $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-    echo "Connected successfully";
+    echo "Connected successfully<br>";
     
     
 $accounts = "select*from accounts where id < 6";
 ($STH = $conn->query($accounts));
+
+$row_count = $STH->rowCount();
+echo $row_count.' rows selected<br>';
 
   $out = "<table border = '1'><tr><th>id</th><th>email</th><th>fname</th><th>lname</th><th>phone</th><th>birthday</th><th>gender</th><th>password</th></tr>";
 
