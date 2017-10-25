@@ -5,22 +5,21 @@ $uname = "rrr36" ;
 $dbase  = "rrr36" ;
 $password = "RV1oUgoVS" ;
 
-( $db = mysqli_connect ( $server, $uname, $password, $dbase ) );
-if (mysqli_connect_errno())
-{
-  echo"Failed to connect to MYSQL ". mysqli_connect_error();
-  exit();
-}
-print "Successfully connected to MySQL<br><br>";
-mysqli_select_db( $dbase );
 
+
+try {
+    $conn = new PDO("mysql:host=$server;dbname=$dbase", $uname, $password);
+    // set the PDO error mode to exception
+    $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+    echo "Connected successfully";
+    
+    
 $accounts = "select*from accounts where id < 6";
-($table = mysqli_query($db,$accounts)) or die (mysqli_error());
+($STH = $conn->query($accounts));
 
-$rows = mysqli_num_rows($table);
-echo "Rows in the table: $rows<br>";
   $out = "<table border = '1'><tr><th>id</th><th>email</th><th>fname</th><th>lname</th><th>phone</th><th>birthday</th><th>gender</th><th>password</th></tr>";
-while($r = mysqli_fetch_array($table)){
+
+while($r = $STH->fetch(PDO::FETCH_ASSOC)){
   
   $id = $r['id'];
   $email = $r['email'];
@@ -42,5 +41,10 @@ while($r = mysqli_fetch_array($table)){
 }
  $out .= "</table>";
  echo $out;
-
+    }
+catch(PDOException $e)
+    {
+    echo "Connection failed: " . $e->getMessage();
+    }
+$conn = null;
 ?>
